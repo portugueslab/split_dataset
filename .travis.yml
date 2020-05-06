@@ -9,14 +9,18 @@ install:
 - pip install Sphinx==3.0.3
 - pip install sphinx_rtd_theme==0.4.3
 - pip install .
+
 script:
 - tox
+- coverage run tests.py
+
 after_success:
 - codecov
 - cd docs
 - sphinx-apidoc ../split_dataset -o ./
 - make html
 - cd ..
+
 deploy:
   - provider: pages
     skip_cleanup: true
