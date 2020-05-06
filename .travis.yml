@@ -1,42 +1,30 @@
-# Config file for automatic testing at travis-ci.com
-
 language: python
 python:
-  - 3.8
-  - 3.7
-  - 3.6
-
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+- 3.8
+- 3.7
+- 3.6
 install:
 - pip install -U tox-travis
 - pip install codecov
 - pip install Sphinx==3.0.3
 - pip install sphinx_rtd_theme==0.4.3
-
 script:
 - tox
-
 after_success:
 - codecov
 - cd docs && make html
 - cd ..
-
-# Assuming you have installed the travis-ci CLI tool, after you
-# create the Github repo and add it to Travis, run the
-# following command to finish PyPI deployment setup:
-# $ travis encrypt --add deploy.password
 deploy:
   - provider: pages
     skip_cleanup: true
     keep_history: true
     github_token:
-        secure: "tDS273dCPe5xFLmNsMzkqzgHRNpb8y4MQEPSst0/jpOxXoy19v1/T0JfBj9i8bROBKGEVQnH93qDFDiqvuz8j6VIKT1HOlfHIwBvViKMfwvpCYIUioySCILxi7suCBCV7YjVw+dAntO/8Omt4Ij0QwTVgxQ6Zgj+Mlf+pzhYw9rHoYDXfzxRgV8j6GyN+XmWCC3WU4ZBXsNyZqm7vYEIcRK2Od1WYbBFbsFS0vo8gGDPxtGlj8MOCYc67jRwp3I1/WWPPVFmdFnSjSIp0Q/miQNXL2LHH7YLAgJoM2u8QRYTXSst5pIROAz7jjIHLgr+ZneeLFSSP2ukWRBKusPDAGUosMkwzTOo5yBHpu+E1FCdzE2hjt6TEUEGU4J9hQfkrwIV6rEhCNBdu3IXixQbMjcEU0Xlz38DrdiwiMMfGV3m7uDxMIHhApC3xzhv+nIHN1jI7y9qLRkz2D4qyGLnKnx7KrYBaPll1ZdpPOXSujsNT24dt4Re2Ihf9UKUg8v1MN1+NfZt7rm60fe9ZPLNlGV+xs6C4uXRgkOyzFog397nHFUe5HtVMiPmqgNQ7ZbH0EACvz3pzhJVlksvwYy18ejBEK8fepc7H/dPDe6h8LeVnLMVh9c9g516J7knGoZ1Xu7O0Eq83bn3xzcKal4iSzwFgix42x4h7YYtHqZDSlg="
+        secure: PNll8Z+1R7L2ScWYP5nLJdnl+12Pk96Krw2HoKOOOEZiUrIfTCod9zgsweZslECei1WcYex5Y8QN8T5Bw3TwiBSjAX0U7WfW+wdY/8ywbfjq+SAT6/dHT126Kbq3S8U8ZUKpCYu9Esu3sss+Bo4rvIMI4LugxR7s6KtjIevJm5bHbgrTkv8x4ifGiYHfaQZqNMToLzpFkYlOY/JV5AnI3nyDyfjC9REG/NS3EqDAC6d0fRnBDkgMcGfH/g22tevhSoFec2OQlGHQrNAz/5PUT8qWzWLKVvlk2txtkYLpy1IKpUW3OZszShmr8E3E9n1sBtmKBdwS5+D7sAxNPGeMVniwZyuJa0Z5dRqsqRr86+yshys0JIO9k5x0VbYzG/RKPCyMVdhf4hyEjHoN0V2oAazGN9rRITJPTUBLKTADZWeRJz6nesvnWlmEcnc1fvp3KYi0L6k26PgXJa5DHHbbumqWJL6AVq0u2m+CeEpGUpUN44Yi/1Tzu5k6rb4OhPrzqMme9zYvVlvhzoTAHz+CXnVPX4V1z5l0c8icMF5zul3UMINLR75ItQ3/BOUv1X1XTk8FuIlvBv6BX+PlFrPfTMJwBjYEc/jv8GRbtc4l4ej+PBYWPHIU9PTrgCWfVimjf04KRdHJKmfKMr6l1ZdXAMRco9G7BCu6Vw+wIvOr+X0=
     on:
       branch: master
       python: 3.8
     local-dir: docs/_build/html
     committer-from-gh: true
-
   - provider: pypi
     skip_cleanup: true
     distributions: sdist bdist_wheel
