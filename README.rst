@@ -1,0 +1,32 @@
+.. image:: https://img.shields.io/pypi/v/split_dataset.svg
+        :target: https://pypi.python.org/pypi/split_dataset
+
+.. image:: https://img.shields.io/travis/portugueslab/split_dataset.svg
+        :target: https://travis-ci.com/portugueslab/split_dataset
+
+
+.. image:: https://pyup.io/repos/github/portugueslab/split_dataset/shield.svg
+     :target: https://pyup.io/repos/github/portugueslab/split_dataset/
+     :alt: Updates
+
+
+
+A package for HDF5-based chunked arrays
+
+This package has been developed in the `Portugues lab`_.
+* Free software: GNU General Public License v3
+* Documentation: https://portugueslab.github.io/split-dataset
+
+Features
+--------
+
+* TODO
+
+Credits
+-------
+
+The package was created with Cookiecutter_ and this_ template.
+
+.. _`Portugues lab`: http://www.portugueslab.com
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _this: https://github.com/audreyr/cookiecutter-pypackage

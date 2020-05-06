@@ -1,0 +1,51 @@
+# Config file for automatic testing at travis-ci.com
+
+language: python
+python:
+  - 3.8
+  - 3.7
+  - 3.6
+  - 3.5
+
+# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install:
+- pip install -U tox-travis
+- pip install codecov
+- pip install Sphinx==3.0.3
+- pip install sphinx_rtd_theme==0.4.3
+
+script:
+- tox
+
+after_success:
+- codecov
+- cd docs && make html
+- cd ..
+
+# Assuming you have installed the travis-ci CLI tool, after you
+# create the Github repo and add it to Travis, run the
+# following command to finish PyPI deployment setup:
+# $ travis encrypt --add deploy.password
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    keep_history: true
+    github_token:
+        secure: "tDS273dCPe5xFLmNsMzkqzgHRNpb8y4MQEPSst0/jpOxXoy19v1/T0JfBj9i8bROBKGEVQnH93qDFDiqvuz8j6VIKT1HOlfHIwBvViKMfwvpCYIUioySCILxi7suCBCV7YjVw+dAntO/8Omt4Ij0QwTVgxQ6Zgj+Mlf+pzhYw9rHoYDXfzxRgV8j6GyN+XmWCC3WU4ZBXsNyZqm7vYEIcRK2Od1WYbBFbsFS0vo8gGDPxtGlj8MOCYc67jRwp3I1/WWPPVFmdFnSjSIp0Q/miQNXL2LHH7YLAgJoM2u8QRYTXSst5pIROAz7jjIHLgr+ZneeLFSSP2ukWRBKusPDAGUosMkwzTOo5yBHpu+E1FCdzE2hjt6TEUEGU4J9hQfkrwIV6rEhCNBdu3IXixQbMjcEU0Xlz38DrdiwiMMfGV3m7uDxMIHhApC3xzhv+nIHN1jI7y9qLRkz2D4qyGLnKnx7KrYBaPll1ZdpPOXSujsNT24dt4Re2Ihf9UKUg8v1MN1+NfZt7rm60fe9ZPLNlGV+xs6C4uXRgkOyzFog397nHFUe5HtVMiPmqgNQ7ZbH0EACvz3pzhJVlksvwYy18ejBEK8fepc7H/dPDe6h8LeVnLMVh9c9g516J7knGoZ1Xu7O0Eq83bn3xzcKal4iSzwFgix42x4h7YYtHqZDSlg="
+    on:
+      branch: master
+      python: 3.8
+    local-dir: docs/_build/html
+    committer-from-gh: true
+
+  - provider: pypi
+    skip_cleanup: true
+    distributions: sdist bdist_wheel
+    user: __token__
+    password:
+      secure: 4Om4fLif+gfVoYYm86uqdCKXSrDojq50XcSA4cLUmtz+mbugp9ewTbucYPHLqWm7LJw/0QixgstD8ivcFKwGXMh1K8vLG80ptOksVKkC2N7kznt+Mx1Kw57ryUmu+PGKb52iKeXDsNiLJcjPjvl9v1E2SA7iCvsP0ClV+n8+dsiXatoftsE9IB18ZbEGGrp8Wq6F2bgS/QQVvCx4MUXV5vJJxYlTnx9TZv1t8kcTtvt6fKT12vzImq6hLpooNInr9GHPm6zQk9+6ibCfSuWD8wFJfi60yiJxAmWhyc7mFc2UtuIVac34E0FAQPT0PGDXZnB+xqTGNJD/3CKkI+AwCO3QaUV6w4vLlNAcZUaAYl/ZPkCOsGIBJ4QVt25vJE9/qFJ2yAzjFJSUDoszztwvogcDwq0kGFMUGC3w4Wkqesqq2FtDQ7deKxO0vKeOFkP40uzPuUtEWVoJ3fRr66WyA+Br0EhhWRudaTlN/MSTK+SgwgFwmz8iiLBvL7BOHoPefDwgK0Z4G+692M8mLgwaOgEkztelFpL6YWH7IirbT2xzESMnJ8yQ7x+AOm1QZocdrZac3trfckMQUIzQgc+o/Ycsh+bwFE88GZdbC8+x1nlI7VkhoMHfPmRJgzXwDYk31ttKFmhTOKCxa6LqwpS15WAyPNFeFx4OArzGxVhnTXc=
+    on:
+      tags: true
+      branch: master
+      python: 3.8
+    skip_existing: true
