@@ -1,5 +1,5 @@
 Welcome to Split Dataset's documentation!
-======================================
+=========================================
 
 .. toctree::
    :maxdepth: 2
