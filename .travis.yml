@@ -13,7 +13,7 @@ script:
 after_success:
 - codecov
 - cd docs
-- sphinx-apidoc ../split_dataset -o source
+- sphinx-apidoc ../split_dataset -o ./
 - make html
 - cd ..
 deploy:
@@ -23,7 +23,7 @@ deploy:
     github_token:
       secure: PNll8Z+1R7L2ScWYP5nLJdnl+12Pk96Krw2HoKOOOEZiUrIfTCod9zgsweZslECei1WcYex5Y8QN8T5Bw3TwiBSjAX0U7WfW+wdY/8ywbfjq+SAT6/dHT126Kbq3S8U8ZUKpCYu9Esu3sss+Bo4rvIMI4LugxR7s6KtjIevJm5bHbgrTkv8x4ifGiYHfaQZqNMToLzpFkYlOY/JV5AnI3nyDyfjC9REG/NS3EqDAC6d0fRnBDkgMcGfH/g22tevhSoFec2OQlGHQrNAz/5PUT8qWzWLKVvlk2txtkYLpy1IKpUW3OZszShmr8E3E9n1sBtmKBdwS5+D7sAxNPGeMVniwZyuJa0Z5dRqsqRr86+yshys0JIO9k5x0VbYzG/RKPCyMVdhf4hyEjHoN0V2oAazGN9rRITJPTUBLKTADZWeRJz6nesvnWlmEcnc1fvp3KYi0L6k26PgXJa5DHHbbumqWJL6AVq0u2m+CeEpGUpUN44Yi/1Tzu5k6rb4OhPrzqMme9zYvVlvhzoTAHz+CXnVPX4V1z5l0c8icMF5zul3UMINLR75ItQ3/BOUv1X1XTk8FuIlvBv6BX+PlFrPfTMJwBjYEc/jv8GRbtc4l4ej+PBYWPHIU9PTrgCWfVimjf04KRdHJKmfKMr6l1ZdXAMRco9G7BCu6Vw+wIvOr+X0=
     on:
-      tags: false
+      tags: true
       branch: master
       python: 3.8
     local-dir: docs/_build/html
@@ -35,7 +35,7 @@ deploy:
     password:
       secure: TltN9lnlaRCw8SxrZPF93fZp4Pl/mElyfL9jPWylsq+tIlp40uUpvhrK+n8ViKVM7EUoBCr0SiIGN8W2p2fGEdLkZJz0+LLhP+omTLM7rGeJ1+0f8wnwhYhDUGmmmjkad8QF0YWlcdRCvir4WsoZrWKemcH5ZipNuHWrPpC3yHt9VB2w2MXNSGipkUy3nRYTqn/GPFeMTdrKPEKpzHVC6s0PSFRjAO1n4wONCkm0FcCYf3AQlE6rW2cYRyufMF7JCqdG7WrYwcc3xgEHEAC3wurz1LgIGcxnHEQg4++b8WFYf30BzqcZRd/WuAiTqmKEQw8jqKklRQ34aTB6OKSzeJWaMDjWetEACcYK96szPSDPCotGKCo8JH8L+PhhfkIQ8oQVQcfC2FpDvadamVTnZoCWlLyanohq1MqFsf2PoEohj5d3kyVFHRpCzQaOuX79lkZtaofrvRtBWs6YmFWPlekubjSGMJaBSe1HYWcnY/AZCmGfaXiEUFmyMO0hsWM+Axkz4fItJ00ndMZlI61xUUkIueQYuItzYPJHZ3SLuRXB1E4hGiFmOU5UPuin18V8xWI3AT6lENgrkut2QXCyx8h5GkilQsALQDKJ86E8VoL4VjEJdLGPROKn4ZQgub++p/t4GoBJ0SnC5Q6RvLad9lIU4Z/FS6/cxXixCGaqzDw=
     on:
-      tags: false
+      tags: true
       branch: master
       python: 3.8
     skip_existing: true
