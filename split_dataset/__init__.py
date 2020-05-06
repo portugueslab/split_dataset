@@ -4,3 +4,4 @@ __author__ = """Vilim Stih & Luigi Petrucco @portugueslab"""
 __version__ = '0.1.2'
 
 from split_dataset.blocks import Blocks
+from split_dataset.split_dataset import SplitDataset, EmptySplitDataset, save_to_split_dataset
