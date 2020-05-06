@@ -11,11 +11,10 @@
 
 
 
-A package for HDF5-based chunked arrays
+A package for HDF5-based chunked arrays used by Fimpy.
 
-This package has been developed in the `Portugues lab`_.
-* Free software: GNU General Public License v3
-* Documentation: https://portugueslab.github.io/split-dataset
+This package has been developed in the `Portugues lab`_. For the documentation,
+visit https://portugueslab.github.io/split-dataset
 
 Features
 --------
