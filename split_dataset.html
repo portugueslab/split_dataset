@@ -1,0 +1,440 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>split_dataset package &mdash; Split Dataset 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="split_dataset" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Split Dataset
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">split_dataset</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">split_dataset package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-split_dataset.blocks">split_dataset.blocks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-split_dataset.split_dataset">split_dataset.split_dataset module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-split_dataset">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Split Dataset</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">split_dataset</a> &raquo;</li>
+        
+      <li>split_dataset package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/split_dataset.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="split-dataset-package">
+<h1>split_dataset package<a class="headerlink" href="#split-dataset-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-split_dataset.blocks">
+<span id="split-dataset-blocks-module"></span><h2>split_dataset.blocks module<a class="headerlink" href="#module-split_dataset.blocks" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="split_dataset.blocks.BlockIterator">
+<em class="property">class </em><code class="sig-prename descclassname">split_dataset.blocks.</code><code class="sig-name descname">BlockIterator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">blocks</span></em>, <em class="sig-param"><span class="n">slices</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#BlockIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.BlockIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="split_dataset.blocks.Blocks">
+<em class="property">class </em><code class="sig-prename descclassname">split_dataset.blocks.</code><code class="sig-name descname">Blocks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shape_full</span><span class="p">:</span> <span class="n">Tuple</span></em>, <em class="sig-param"><span class="n">shape_block</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dim_split</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">blocks_number</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>int<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padding</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>int<span class="p">, </span>Tuple<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">0</span></em>, <em class="sig-param"><span class="n">crop</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Tuple<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
+<dt>Blocks have two indexing systems:</dt><dd><ul class="simple">
+<li><p>linear:</p></li>
+<li><p>cartesian: gives the position of the block in the general block tiling.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.block_containing_coords">
+<code class="sig-name descname">block_containing_coords</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">coords</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.block_containing_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.block_containing_coords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the linear index of a block containing the given coordinates</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>coords</strong> – a tuple of the coordinates</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.block_to_slices">
+<em class="property">static </em><code class="sig-name descname">block_to_slices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">block</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.block_to_slices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.block_to_slices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.blocks_to_take">
+<code class="sig-name descname">blocks_to_take</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start_take</span></em>, <em class="sig-param"><span class="n">end_take</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.blocks_to_take"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.blocks_to_take" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find which blocks to take to cover the range:
+:param start_take: starting points in the N dims (tuple)
+:param end_take: ending points in the N dims (tuple)
+:return: tuple of tuples with the extremes of blocks to take in N dims;</p>
+<blockquote>
+<div><p>starting index of data in the first block;
+ending index of data in the last block.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.cartesian_to_linear">
+<code class="sig-name descname">cartesian_to_linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ca_idx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.cartesian_to_linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.cartesian_to_linear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert block cartesian index in linear index.
+Example: in a 3D stack split in 2x2x3 blocks</p>
+<p>self.cartesian_to_linear0,0,0) = 0  # first block
+bs.cartesian_to_linear(1,1,2) = 11  # last block</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ca_idx</strong> – block cartesian index (tuple of ints)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>block linear index (int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.centres">
+<code class="sig-name descname">centres</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.centres"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.centres" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.crop">
+<em class="property">property </em><code class="sig-name descname">crop</code><a class="headerlink" href="#split_dataset.blocks.Blocks.crop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.drop_dim">
+<code class="sig-name descname">drop_dim</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dim_to_drop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.drop_dim"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.drop_dim" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new BlockSplitter object with a dimension dropped,
+useful for getting spatial from spatio-temporal blocks.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dim_to_drop</strong> – dimension to be dropped (int)</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>new BlockSplitter object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.linear_to_cartesian">
+<code class="sig-name descname">linear_to_cartesian</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">lin_idx</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.linear_to_cartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.linear_to_cartesian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert block linear index into cartesian index.
+Example: in a 3D stack split in 2x2x3 blocks,</p>
+<p>self.linear_to_cartesian(0) = (0,0,0)  # first block
+bs.linear_to_cartesian(11) = (1,1,2)  # last block
+:param lin_idx: block linear index (int)
+:return: block cartesian index (tuple of ints)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.neighbour_blocks">
+<code class="sig-name descname">neighbour_blocks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i_block</span></em>, <em class="sig-param"><span class="n">dims</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.neighbour_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.neighbour_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return neighbouring blocks across given dimensions
+:param i_block:
+:param dims:
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.padding">
+<em class="property">property </em><code class="sig-name descname">padding</code><a class="headerlink" href="#split_dataset.blocks.Blocks.padding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.serialize">
+<code class="sig-name descname">serialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.serialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.serialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary with a complete description of the
+BlockSplitter, e.g. to save its structure as json file.
+:return:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.shape_block">
+<em class="property">property </em><code class="sig-name descname">shape_block</code><a class="headerlink" href="#split_dataset.blocks.Blocks.shape_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.shape_full">
+<em class="property">property </em><code class="sig-name descname">shape_full</code><a class="headerlink" href="#split_dataset.blocks.Blocks.shape_full" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.slices">
+<code class="sig-name descname">slices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">as_tuples</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.slices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.slices" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.update_block_structure">
+<code class="sig-name descname">update_block_structure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.update_block_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.update_block_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the Blocks structure, e.g. when block
+shape or padding are changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.update_stack_dims">
+<code class="sig-name descname">update_stack_dims</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.update_stack_dims"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.update_stack_dims" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update stack dimensions and cropping, if shape_full or cropping
+is changed.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-split_dataset.split_dataset">
+<span id="split-dataset-split-dataset-module"></span><h2>split_dataset.split_dataset module<a class="headerlink" href="#module-split_dataset.split_dataset" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="split_dataset.split_dataset.EmptySplitDataset">
+<em class="property">class </em><code class="sig-prename descclassname">split_dataset.split_dataset.</code><code class="sig-name descname">EmptySplitDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span></em>, <em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">resolution</span><span class="o">=</span><span class="default_value">1, 1, 1</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#EmptySplitDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.EmptySplitDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#split_dataset.blocks.Blocks" title="split_dataset.blocks.Blocks"><code class="xref py py-class docutils literal notranslate"><span class="pre">split_dataset.blocks.Blocks</span></code></a></p>
+<p>Class to initialize an empty dataset for which we have to save metadata
+after filling its blocks.</p>
+<dl class="py method">
+<dt id="split_dataset.split_dataset.EmptySplitDataset.finalize">
+<code class="sig-name descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#EmptySplitDataset.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.EmptySplitDataset.finalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.split_dataset.EmptySplitDataset.save_block_data">
+<code class="sig-name descname">save_block_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#EmptySplitDataset.save_block_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.EmptySplitDataset.save_block_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Optional method to save data in a block. Often we don’t use it,
+as we directly save data in the parallelized function. Might be good to
+find ways of centralizing saving here?
+:param n: n of the block we are saving in;
+:param data: data to be pured in the block;
+:param verbose:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="split_dataset.split_dataset.SplitDataset">
+<em class="property">class </em><code class="sig-prename descclassname">split_dataset.split_dataset.</code><code class="sig-name descname">SplitDataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">root</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#SplitDataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.SplitDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#split_dataset.blocks.Blocks" title="split_dataset.blocks.Blocks"><code class="xref py py-class docutils literal notranslate"><span class="pre">split_dataset.blocks.Blocks</span></code></a></p>
+<p>Manages datasets split over multiple h5 file across arbitrary dimensions.
+To do so, uses the BlockSplitter class functions, and define blocks as
+files.</p>
+<dl class="py method">
+<dt id="split_dataset.split_dataset.SplitDataset.apply_crop">
+<code class="sig-name descname">apply_crop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#SplitDataset.apply_crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.SplitDataset.apply_crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Take out the data with a crop</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="split_dataset.split_dataset.save_to_split_dataset">
+<code class="sig-prename descclassname">split_dataset.split_dataset.</code><code class="sig-name descname">save_to_split_dataset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">root_name</span></em>, <em class="sig-param"><span class="n">block_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">crop</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">padding</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">compression</span><span class="o">=</span><span class="default_value">'blosc'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#save_to_split_dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.save_to_split_dataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to save block of data into a split_dataset.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-split_dataset">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-split_dataset" title="Permalink to this headline">¶</a></h2>
+<p>Top-level package for Split Dataset.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="split_dataset" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Vilim Stih &amp; Luigi Petrucco @portugueslab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

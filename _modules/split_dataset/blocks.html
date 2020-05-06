@@ -1,0 +1,596 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>split_dataset.blocks &mdash; Split Dataset 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> Split Dataset
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html#credits">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">split_dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../authors.html">Credits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Split Dataset</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>split_dataset.blocks</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for split_dataset.blocks</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">flammkuchen</span> <span class="k">as</span> <span class="nn">fl</span>
+<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+
+
+<div class="viewcode-block" id="BlockIterator"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.BlockIterator">[docs]</a><span class="k">class</span> <span class="nc">BlockIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">blocks</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_block</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">slices</span> <span class="o">=</span> <span class="n">slices</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_block</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">n_blocks</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">linear_to_cartesian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_block</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_block</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">slices</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="n">idx</span><span class="p">,</span>
+                    <span class="nb">tuple</span><span class="p">(</span>
+                        <span class="nb">slice</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">block_ends</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span>
+                    <span class="n">idx</span><span class="p">,</span>
+                    <span class="nb">tuple</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="o">.</span><span class="n">block_ends</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="p">),</span>
+                <span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_make_iterable</span><span class="p">(</span><span class="n">input_var</span><span class="p">,</span> <span class="n">n_rep</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">iter</span><span class="p">(</span><span class="n">input_var</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">input_var</span>
+    <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">input_var</span><span class="p">,)</span> <span class="o">*</span> <span class="n">n_rep</span>
+
+
+<div class="viewcode-block" id="Blocks"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks">[docs]</a><span class="k">class</span> <span class="nc">Blocks</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Blocks have two indexing systems:</span>
+<span class="sd">     - linear:</span>
+<span class="sd">     - cartesian: gives the position of the block in the general block tiling.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">shape_full</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">,</span>
+        <span class="n">shape_block</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">dim_split</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">blocks_number</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">padding</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="n">crop</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Make a block structure. It can be defined using block size or number</span>
+<span class="sd">        of blocks (number of blocks if specified will overwrite size).</span>
+<span class="sd">        For example, one split over the 2nd and 3rd dimensions of a 100x20x40x10 block can</span>
+<span class="sd">        equivalently defined as:</span>
+<span class="sd">        BlockSplitter((100,20,40,10), block_size=(10,10,20,30))</span>
+<span class="sd">        BlockSplitter((100,20,40,10), blocks_number=(1, 2, 2, 1))</span>
+<span class="sd">        BlockSplitter((100,20,40,10), dim_split=(1,2), block_size=(10,20))</span>
+<span class="sd">        BlockSplitter((100,20,40,10), dim_split=(1,2), blocks_number=(2,2))</span>
+
+<span class="sd">        :param shape_full: dimensions of the whole stack</span>
+<span class="sd">        :param dim_split: dimension along which to split (if undefined, start</span>
+<span class="sd">           counting from the first dimension)</span>
+<span class="sd">        :param shape_block: size of blocks along each dimension</span>
+<span class="sd">        :param blocks_number: number of blocks along each dimension</span>
+<span class="sd">        :param padding: amount of overlap between blocks</span>
+<span class="sd">        :param crop: iterable of tuples giving the amount of cropping in</span>
+<span class="sd">            each dimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape_full</span> <span class="o">=</span> <span class="n">shape_full</span>
+
+        <span class="k">if</span> <span class="n">crop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">crop</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape_full</span><span class="p">)</span> <span class="k">if</span> <span class="n">shape_full</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_crop</span> <span class="o">=</span> <span class="n">crop</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span> <span class="o">=</span> <span class="n">shape_full</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">starts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_ends</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stack_dims</span><span class="p">()</span>
+
+        <span class="c1"># Define shape block and padding allowing multiple input types.</span>
+
+        <span class="c1"># Initialize block size as full stack size and 0 padding:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">))]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dim_split</span><span class="p">:</span>
+            <span class="n">dim_split</span> <span class="o">=</span> <span class="p">[</span><span class="n">j</span> <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shape_block</span><span class="p">)</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="c1"># Make tuple if single numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span> <span class="o">=</span> <span class="n">_make_iterable</span><span class="p">(</span><span class="n">dim_split</span><span class="p">)</span>
+        <span class="n">shape_block</span> <span class="o">=</span> <span class="n">_make_iterable</span><span class="p">(</span><span class="n">shape_block</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">pad_amount</span> <span class="o">=</span> <span class="n">_make_iterable</span><span class="p">(</span><span class="n">padding</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">blocks_number</span><span class="p">:</span>  <span class="c1"># define from required number of blocks</span>
+            <span class="n">shape_block</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">blocks_number</span> <span class="o">=</span> <span class="n">_make_iterable</span><span class="p">(</span><span class="n">blocks_number</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">dim</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span><span class="p">,</span> <span class="n">blocks_number</span><span class="p">):</span>
+                <span class="n">shape_block</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">/</span> <span class="n">n</span><span class="p">)))</span>
+
+        <span class="k">for</span> <span class="n">dim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dim_split</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">shape_block</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">pad_amount</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape_full</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape_full</span>
+
+    <span class="nd">@shape_full</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">shape_full</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape_full</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stack_dims</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_block_structure</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_crop</span>
+
+    <span class="nd">@crop</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_crop</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_stack_dims</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_block_structure</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape_block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span>
+
+    <span class="nd">@shape_block</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">shape_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_block_structure</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">padding</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span>
+
+    <span class="nd">@padding</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">padding</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_block_structure</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Blocks.update_stack_dims"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.update_stack_dims">[docs]</a>    <span class="k">def</span> <span class="nf">update_stack_dims</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Update stack dimensions and cropping, if shape_full or cropping</span>
+<span class="sd">        is changed.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="n">d</span> <span class="o">-</span> <span class="n">cl</span> <span class="o">-</span> <span class="n">ch</span> <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="p">(</span><span class="n">cl</span><span class="p">,</span> <span class="n">ch</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">starts</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cl</span> <span class="k">for</span> <span class="n">cl</span><span class="p">,</span> <span class="n">ch</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.update_block_structure"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.update_block_structure">[docs]</a>    <span class="k">def</span> <span class="nf">update_block_structure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the Blocks structure, e.g. when block</span>
+<span class="sd">        shape or padding are changed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Cartesian product for generating a list of indexes on every split</span>
+        <span class="c1"># dimension (i.e., dimensions where int(np.ceil(stack_size / block_size)</span>
+        <span class="c1">#  is != 1).</span>
+        <span class="c1"># For example, splitting one time in 2nd and 3rd dims,</span>
+        <span class="c1"># idx_blocks = (0, 0, 0, 0), (0, 0, 1, 0), (0, 1, 0, 0), (0, 1, 1, 0).</span>
+
+        <span class="c1"># block_starts and block_ends will be arrays of shape</span>
+        <span class="c1"># (n_blocks_dim0, n_blocks_dim1, n_blocks_dim2 ..., shape_full)</span>
+        <span class="c1"># by addressing the N-1 dimensions with the index of the block we</span>
+        <span class="c1"># will get a vector with the starting position of the block on all</span>
+        <span class="c1"># original dimensions of the full stack.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+                <span class="nb">tuple</span><span class="p">(</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">stack_size</span> <span class="o">-</span> <span class="n">pad_size</span><span class="p">)</span> <span class="o">/</span> <span class="n">block_size</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">stack_size</span><span class="p">,</span> <span class="n">block_size</span><span class="p">,</span> <span class="n">pad_size</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">padding</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+                <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">),),</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">block_ends</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">idx_blocks</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">idx_blocks</span> <span class="o">+</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),)]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">st</span> <span class="o">+</span> <span class="n">i_bd</span> <span class="o">*</span> <span class="n">bs</span>
+                    <span class="k">for</span> <span class="n">i_bd</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">st</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">idx_blocks</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">block_ends</span><span class="p">[</span><span class="n">idx_blocks</span> <span class="o">+</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">),)]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="nb">min</span><span class="p">(</span><span class="n">maxdim</span> <span class="o">+</span> <span class="n">st</span><span class="p">,</span> <span class="p">(</span><span class="n">i_bd</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">bs</span> <span class="o">+</span> <span class="n">pd</span> <span class="o">+</span> <span class="n">st</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">i_bd</span><span class="p">,</span> <span class="n">bs</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span> <span class="n">maxdim</span><span class="p">,</span> <span class="n">st</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                        <span class="n">idx_blocks</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">,</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">]</span>
+
+            <span class="c1"># for iterations</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_blocks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.slices"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.slices">[docs]</a>    <span class="k">def</span> <span class="nf">slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_tuples</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">BlockIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="ow">not</span> <span class="n">as_tuples</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.linear_to_cartesian"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.linear_to_cartesian">[docs]</a>    <span class="k">def</span> <span class="nf">linear_to_cartesian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lin_idx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert block linear index into cartesian index.</span>
+<span class="sd">        Example: in a 3D stack split in 2x2x3 blocks,</span>
+
+<span class="sd">        self.linear_to_cartesian(0) = (0,0,0)  # first block</span>
+<span class="sd">        bs.linear_to_cartesian(11) = (1,1,2)  # last block</span>
+<span class="sd">        :param lin_idx: block linear index (int)</span>
+<span class="sd">        :return: block cartesian index (tuple of ints)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">lin_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Blocks.cartesian_to_linear"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.cartesian_to_linear">[docs]</a>    <span class="k">def</span> <span class="nf">cartesian_to_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ca_idx</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert block cartesian index in linear index.</span>
+<span class="sd">        Example: in a 3D stack split in 2x2x3 blocks</span>
+
+<span class="sd">        self.cartesian_to_linear0,0,0) = 0  # first block</span>
+<span class="sd">        bs.cartesian_to_linear(1,1,2) = 11  # last block</span>
+
+<span class="sd">        :param ca_idx: block cartesian index (tuple of ints)</span>
+<span class="sd">        :return: block linear index (int)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel_multi_index</span><span class="p">(</span><span class="n">ca_idx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param item:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO make less brittle, support also indexing by tuples</span>
+
+        <span class="c1"># TODO decide what should be returned: slices are tricky</span>
+        <span class="c1"># with multiprocessing</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_to_cartesian</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="nb">slice</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_ends</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="Blocks.neighbour_blocks"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.neighbour_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">neighbour_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i_block</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return neighbouring blocks across given dimensions</span>
+<span class="sd">        :param i_block:</span>
+<span class="sd">        :param dims:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear_to_cartesian</span><span class="p">(</span><span class="n">i_block</span><span class="p">)</span>
+        <span class="n">act_dims</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">act_dims</span><span class="p">[</span><span class="n">dims</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">neighbors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx_neighbour</span> <span class="ow">in</span> <span class="n">product</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">[</span>
+                <span class="p">(</span>
+                    <span class="nb">range</span><span class="p">(</span>
+                        <span class="nb">max</span><span class="p">(</span><span class="n">block_idx</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="nb">min</span><span class="p">(</span><span class="n">block_idx</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]),</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">act_dims</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]</span>
+                    <span class="k">else</span> <span class="p">[</span><span class="n">block_idx</span><span class="p">[</span><span class="n">i_dim</span><span class="p">]]</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i_dim</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">idx_neighbour</span> <span class="o">!=</span> <span class="n">block_idx</span><span class="p">:</span>
+                <span class="n">neighbors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx_neighbour</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">neighbors</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ravel_multi_index</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">neighbors</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span></div>
+
+<div class="viewcode-block" id="Blocks.blocks_to_take"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.blocks_to_take">[docs]</a>    <span class="k">def</span> <span class="nf">blocks_to_take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_take</span><span class="p">,</span> <span class="n">end_take</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find which blocks to take to cover the range:</span>
+<span class="sd">        :param start_take: starting points in the N dims (tuple)</span>
+<span class="sd">        :param end_take: ending points in the N dims (tuple)</span>
+<span class="sd">        :return: tuple of tuples with the extremes of blocks to take in N dims;</span>
+<span class="sd">                 starting index of data in the first block;</span>
+<span class="sd">                 ending index of data in the last block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_take</span><span class="p">)</span>
+        <span class="n">block_slices</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">take_block_s_idx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">take_block_e_idx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i_dim</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">start_take</span><span class="p">,</span> <span class="n">end_take</span><span class="p">)):</span>
+            <span class="n">axis_index</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                <span class="mi">0</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">i_dim</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_dims</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i_dim</span><span class="p">,)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="nb">min</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">axis_index</span><span class="p">],</span> <span class="n">start</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">axis_index</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">axis_index</span><span class="p">],</span> <span class="n">end</span><span class="p">)</span>
+            <span class="n">block_start</span> <span class="o">=</span> <span class="n">start</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">axis_index</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+            <span class="n">block_end</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span><span class="n">axis_index</span><span class="p">][</span><span class="n">e</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">block_slices</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">))</span>
+            <span class="n">take_block_s_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block_start</span><span class="p">)</span>
+            <span class="n">take_block_e_idx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">block_end</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">block_slices</span><span class="p">,</span> <span class="n">take_block_s_idx</span><span class="p">,</span> <span class="n">take_block_e_idx</span></div>
+
+<div class="viewcode-block" id="Blocks.block_to_slices"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.block_to_slices">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">block_to_slices</span><span class="p">(</span><span class="n">block</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">lb</span><span class="p">,</span> <span class="n">rb</span><span class="p">)</span> <span class="k">for</span> <span class="n">lb</span><span class="p">,</span> <span class="n">rb</span> <span class="ow">in</span> <span class="n">block</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.centres"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.centres">[docs]</a>    <span class="k">def</span> <span class="nf">centres</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_ends</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="Blocks.block_containing_coords"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.block_containing_coords">[docs]</a>    <span class="k">def</span> <span class="nf">block_containing_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coords</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Find the linear index of a block containing the given coordinates</span>
+
+<span class="sd">        :param coords: a tuple of the coordinates</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dims</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ic</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">coords</span><span class="p">):</span>
+            <span class="c1"># Create a tuple with the starting points on current dimension</span>
+            <span class="c1"># for all the blocks:</span>
+            <span class="n">starts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="p">[</span>
+                <span class="nb">tuple</span><span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">ic</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="n">ic</span><span class="p">,)</span>
+            <span class="p">]</span>
+
+            <span class="c1"># find in which position our guy should be ordered, correcting</span>
+            <span class="c1"># for 0 value:</span>
+            <span class="n">dims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">searchsorted</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">dims</span></div>
+
+<div class="viewcode-block" id="Blocks.drop_dim"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.drop_dim">[docs]</a>    <span class="k">def</span> <span class="nf">drop_dim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim_to_drop</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a new BlockSplitter object with a dimension dropped,</span>
+<span class="sd">        useful for getting spatial from spatio-temporal blocks.</span>
+
+<span class="sd">        :param dim_to_drop: dimension to be dropped (int)</span>
+<span class="sd">        :return: new BlockSplitter object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">drop_ith</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">xs</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">x</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">dim_to_drop</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Blocks</span><span class="p">(</span>
+            <span class="n">drop_ith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">),</span>
+            <span class="n">shape_block</span><span class="o">=</span><span class="n">drop_ith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">),</span>
+            <span class="n">padding</span><span class="o">=</span><span class="n">drop_ith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">),</span>
+            <span class="n">crop</span><span class="o">=</span><span class="n">drop_ith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Blocks.serialize"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.serialize">[docs]</a>    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a dictionary with a complete description of the</span>
+<span class="sd">        BlockSplitter, e.g. to save its structure as json file.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO it should be possible to initialize the BlockSplitter from</span>
+        <span class="c1"># this dictionary!</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">shape_full</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">,</span>
+            <span class="n">shape_block</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">,</span>
+            <span class="n">crop_start</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">),</span>
+            <span class="n">crop_end</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">),</span>
+            <span class="n">padding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">padding</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Vilim Stih &amp; Luigi Petrucco @portugueslab
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
