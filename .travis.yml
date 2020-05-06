@@ -13,6 +13,7 @@ script:
 after_success:
 - codecov
 - cd docs && make html
+- sphinx-apidoc ../split_dataset -o source
 - cd ..
 deploy:
   - provider: pages
