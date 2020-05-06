@@ -14,7 +14,7 @@
 A package for HDF5-based chunked arrays used by Fimpy.
 
 This package has been developed in the `Portugues lab`_. For the documentation,
-visit https://portugueslab.github.io/split-dataset
+visit https://portugueslab.github.io/split_dataset
 
 Features
 --------
