@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.1
+                0.2.2
               </div>
             
           
@@ -161,7 +161,6 @@
 <span class="kn">import</span> <span class="nn">flammkuchen</span> <span class="k">as</span> <span class="nn">fl</span>
 <span class="kn">from</span> <span class="nn">split_dataset.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
-
 
 <span class="c1"># TODO this should probably be done as a constructor of the SplitDataset</span>
 <div class="viewcode-block" id="save_to_split_dataset"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.split_dataset.save_to_split_dataset">[docs]</a><span class="k">def</span> <span class="nf">save_to_split_dataset</span><span class="p">(</span>
@@ -393,6 +392,14 @@
             <span class="p">)</span>
             <span class="n">output</span><span class="p">[</span><span class="n">output_sel_tuple</span><span class="p">]</span> <span class="o">=</span> <span class="n">arr</span>
 
+        <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="s2">&quot;Trying to index the split dataset outside of bounds, between &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">starts</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot; and &quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ends</span><span class="p">)</span>
+            <span class="p">)</span>
+
         <span class="n">output_sel</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="mi">0</span> <span class="k">if</span> <span class="n">singleton</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">singleton</span> <span class="ow">in</span> <span class="n">singletons</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">output</span><span class="p">[</span><span class="n">output_sel</span><span class="p">]</span>
@@ -427,7 +434,7 @@
 <span class="sd">    after filling its blocks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param root: folder where the stack will be saved;</span>
 <span class="sd">        :param name: name of the dataset, for the folder name;</span>
@@ -450,23 +457,27 @@
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fname</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{:04d}</span><span class="s2">.h5&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Saving &quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">fname</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; - data has different dimension from block!&quot;</span><span class="p">)</span>
 
-        <span class="n">to_save</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;stack_</span><span class="si">{</span><span class="n">n_dims</span><span class="si">}</span><span class="s2">D&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
+        <span class="n">to_save</span> <span class="o">=</span> <span class="p">{</span><span class="sa">f</span><span class="s2">&quot;stack&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">}</span>
 
         <span class="n">fl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">fname</span><span class="p">),</span> <span class="n">to_save</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;blosc&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="EmptySplitDataset.finalize"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.split_dataset.EmptySplitDataset.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span><span class="p">)</span>
         <span class="n">block_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">serialize</span><span class="p">()</span>
         <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;shape_full&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span>
-        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;crop_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">)</span>
-        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;crop_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_full</span><span class="p">)</span>
-        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;resolution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;crop_start&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">*</span> <span class="n">n_dims</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;crop_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,)</span> <span class="o">*</span> <span class="n">n_dims</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;resolution&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> \
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="n">n_dims</span>
+
+        <span class="n">block_dict</span><span class="p">[</span><span class="s2">&quot;axis_order&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;tzyx&quot;</span> <span class="k">if</span> <span class="n">n_dims</span> <span class="o">==</span> <span class="mi">4</span> <span class="k">else</span> <span class="s2">&quot;zyx&quot;</span>
+
         <span class="n">_save_metadata_json</span><span class="p">(</span><span class="n">block_dict</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">SplitDataset</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span></div></div>
 
