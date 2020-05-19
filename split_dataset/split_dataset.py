@@ -5,7 +5,6 @@ import flammkuchen as fl
 from split_dataset.blocks import Blocks
 from itertools import product
 
-
 # TODO this should probably be done as a constructor of the SplitDataset
 def save_to_split_dataset(
     data,
@@ -235,6 +234,14 @@ class SplitDataset(Blocks):
                 )
             )
             output[output_sel_tuple] = arr
+
+        if output is None:
+            raise IndexError(
+                "Trying to index the split dataset outside of bounds, between "
+                + str(starts)
+                + " and "
+                + str(ends)
+            )
 
         output_sel = tuple(0 if singleton else slice(None) for singleton in singletons)
 
