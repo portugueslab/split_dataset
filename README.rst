@@ -3,10 +3,9 @@
 
 .. image:: https://img.shields.io/travis/portugueslab/split_dataset.svg
         :target: https://travis-ci.com/portugueslab/split_dataset
- 
+
 .. image:: https://codecov.io/gh/portugueslab/split_dataset/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/portugueslab/split_dataset
-
 
 .. image:: https://pyup.io/repos/github/portugueslab/split_dataset/shield.svg
      :target: https://pyup.io/repos/github/portugueslab/split_dataset/

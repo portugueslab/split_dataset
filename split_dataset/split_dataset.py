@@ -270,7 +270,7 @@ class EmptySplitDataset(Blocks):
     after filling its blocks.
     """
 
-    def __init__(self, root, name, *args, resolution=(1, 1, 1), **kwargs):
+    def __init__(self, root, name, *args, resolution=None, **kwargs):
         """
         :param root: folder where the stack will be saved;
         :param name: name of the dataset, for the folder name;
@@ -293,23 +293,27 @@ class EmptySplitDataset(Blocks):
         :return:
         """
         fname = "{:04d}.h5".format(n)
-        n_dims = len(self.shape_block)
         if verbose:
             print("Saving ", str(self.root / fname))
 
             if data.shape != self.shape_block:
                 print(" - data has different dimension from block!")
 
-        to_save = {f"stack_{n_dims}D": data}
+        to_save = {f"stack": data}
 
         fl.save(str(self.root / fname), to_save, compression="blosc")
 
     def finalize(self):
+        n_dims = len(self.shape_block)
         block_dict = self.serialize()
         block_dict["shape_full"] = self.shape_cropped
-        block_dict["crop_start"] = (0,) * len(self.shape_full)
-        block_dict["crop_end"] = (0,) * len(self.shape_full)
-        block_dict["resolution"] = self.resolution
+        block_dict["crop_start"] = (0,) * n_dims
+        block_dict["crop_end"] = (0,) * n_dims
+        block_dict["resolution"] = self.resolution \
+            if self.resolution is not None else (1,) * n_dims
+
+        block_dict["axis_order"] = "tzyx" if n_dims == 4 else "zyx"
+
         _save_metadata_json(block_dict, self.root)
         return SplitDataset(self.root)
 
