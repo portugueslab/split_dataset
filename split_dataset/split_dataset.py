@@ -287,6 +287,8 @@ class EmptySplitDataset(Blocks):
         self.root = Path(root) / name
         if not self.root.is_dir():
             self.root.mkdir(parents=True)
+            #add warning
+        
         self.files = ["{:04d}.h5".format(i) for i in range(self.n_blocks)]
         self.resolution = resolution
 
