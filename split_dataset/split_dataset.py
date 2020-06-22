@@ -50,13 +50,10 @@ class SplitDataset(Blocks):
 
     def __init__(self, root, prefix=None):
         """
-
-        :param files: A list of files within the root directory containing
-        the stack
-        :param shape_full: full size of the stack
-        :param shape_block: size of a single file
-        :param provenance: provenance data
         :param root: The directory containing the files
+        :param prefix: The class assumes individual file names to be xxxx.h5. If there is a prefix to this,
+        for example if the files are stack_xxxx.h5 this has to be passed to the object as a string, in this
+        particular case it would be prefix="stack_"
         """
 
         # Load information about stack and splitting. Use the json metadata
