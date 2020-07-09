@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import flammkuchen as fl
 from split_dataset.blocks import Blocks
+import warnings
 from itertools import product
 
 # TODO this should probably be done as a constructor of the SplitDataset
@@ -284,6 +285,9 @@ class EmptySplitDataset(Blocks):
         self.root = Path(root) / name
         if not self.root.is_dir():
             self.root.mkdir(parents=True)
+        else:
+            warnings.warn('Existing directory')
+
         self.files = ["{:04d}.h5".format(i) for i in range(self.n_blocks)]
         self.resolution = resolution
 
