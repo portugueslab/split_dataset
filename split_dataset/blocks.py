@@ -1,8 +1,6 @@
 import numpy as np
-import flammkuchen as fl
 from itertools import product
 from typing import Union, Tuple, Optional
-
 
 class BlockIterator:
     def __init__(self, blocks, slices=True):

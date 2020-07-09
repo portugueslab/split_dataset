@@ -5,6 +5,9 @@ import flammkuchen as fl
 from split_dataset.blocks import Blocks
 import warnings
 from itertools import product
+import dask.array as da
+import h5py
+
 
 # TODO this should probably be done as a constructor of the SplitDataset
 def save_to_split_dataset(
@@ -244,6 +247,27 @@ class SplitDataset(Blocks):
         output_sel = tuple(0 if singleton else slice(None) for singleton in singletons)
 
         return output[output_sel]
+
+    def as_dask(self):
+        """ Function to create a Dask array from a split dataset.
+           :param dataset: SplitDataset object
+           :return:
+           Dask array
+           """
+        # Load the h5 files:
+        files = sorted(self.root.glob("*[0-9].h5"))  # find all files
+        keys = list(h5py.File(str(files[0]), mode="r").keys())  # all keys in the h5
+        key = [k for k in keys if "stack" in k][0]  # could be stack, or stack_3D, or stack_4D
+        dsets = [h5py.File(f, mode="r")[f"/{key}"] for f in files]  # load all datasets
+
+        # Make all dask arrays and concatenate them:
+        arrays = [da.from_array(dset) for dset in dsets]  # list of lazy dask arrays
+
+        # Here we find which axis the stack should be concatenated on:
+        concatenate_axis = [i for i, (sf, sb) in enumerate(zip(self.shape, self.shape_block))
+                            if sf != sb][0]
+
+        return da.concatenate(arrays, axis=concatenate_axis)
 
     def apply_crop(self, crop):
         """ Take out the data with a crop

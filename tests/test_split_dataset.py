@@ -55,3 +55,17 @@ class TestSplitDataset(unittest.TestCase):
                     + str(b.shape),
                 )
 
+    def test_dask(self):
+        di = (100, 100)
+        bs = (10, 10)
+        test_data = np.arange(np.product(di)).reshape(di)
+
+        sd = save_to_split_dataset(
+            test_data,
+            block_size=bs,
+            root_name=self.test_dir
+        )
+
+        sd_full = sd[:, :]
+        sd_dask = np.array(sd.as_dask())
+        np.testing.assert_equal(sd_full, sd_dask)
