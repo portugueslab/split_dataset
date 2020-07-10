@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -279,6 +279,16 @@ bs.linear_to_cartesian(11) = (1,1,2)  # last block
 </dd></dl>
 
 <dl class="py method">
+<dt id="split_dataset.blocks.Blocks.n_blocks">
+<em class="property">property </em><code class="sig-name descname">n_blocks</code><a class="headerlink" href="#split_dataset.blocks.Blocks.n_blocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.blocks.Blocks.n_dims">
+<em class="property">property </em><code class="sig-name descname">n_dims</code><a class="headerlink" href="#split_dataset.blocks.Blocks.n_dims" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt id="split_dataset.blocks.Blocks.neighbour_blocks">
 <code class="sig-name descname">neighbour_blocks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i_block</span></em>, <em class="sig-param"><span class="n">dims</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/blocks.html#Blocks.neighbour_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.blocks.Blocks.neighbour_blocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return neighbouring blocks across given dimensions
@@ -371,6 +381,21 @@ files.</p>
 <dt id="split_dataset.split_dataset.SplitDataset.apply_crop">
 <code class="sig-name descname">apply_crop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">crop</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#SplitDataset.apply_crop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.SplitDataset.apply_crop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Take out the data with a crop</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.split_dataset.SplitDataset.as_dask">
+<code class="sig-name descname">as_dask</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/split_dataset/split_dataset.html#SplitDataset.as_dask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#split_dataset.split_dataset.SplitDataset.as_dask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create a Dask array from a split dataset.
+:param dataset: SplitDataset object
+:return:
+Dask array</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="split_dataset.split_dataset.SplitDataset.data_key">
+<em class="property">property </em><code class="sig-name descname">data_key</code><a class="headerlink" href="#split_dataset.split_dataset.SplitDataset.data_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>To migrate smoothly to removal of stack_ND key in favour of only stack</p>
 </dd></dl>
 
 </dd></dl>

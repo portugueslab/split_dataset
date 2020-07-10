@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -160,7 +160,10 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">flammkuchen</span> <span class="k">as</span> <span class="nn">fl</span>
 <span class="kn">from</span> <span class="nn">split_dataset.blocks</span> <span class="kn">import</span> <span class="n">Blocks</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+
 
 <span class="c1"># TODO this should probably be done as a constructor of the SplitDataset</span>
 <div class="viewcode-block" id="save_to_split_dataset"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.split_dataset.save_to_split_dataset">[docs]</a><span class="k">def</span> <span class="nf">save_to_split_dataset</span><span class="p">(</span>
@@ -207,13 +210,10 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-
-<span class="sd">        :param files: A list of files within the root directory containing</span>
-<span class="sd">        the stack</span>
-<span class="sd">        :param shape_full: full size of the stack</span>
-<span class="sd">        :param shape_block: size of a single file</span>
-<span class="sd">        :param provenance: provenance data</span>
 <span class="sd">        :param root: The directory containing the files</span>
+<span class="sd">        :param prefix: The class assumes individual file names to be xxxx.h5. If there is a prefix to this,</span>
+<span class="sd">        for example if the files are stack_xxxx.h5 this has to be passed to the object as a string, in this</span>
+<span class="sd">        particular case it would be prefix=&quot;stack_&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Load information about stack and splitting. Use the json metadata</span>
@@ -254,17 +254,13 @@
             <span class="n">shape_full</span><span class="o">=</span><span class="n">block_metadata</span><span class="p">[</span><span class="s2">&quot;shape_full&quot;</span><span class="p">],</span>
             <span class="n">shape_block</span><span class="o">=</span><span class="n">block_metadata</span><span class="p">[</span><span class="s2">&quot;shape_block&quot;</span><span class="p">],</span>
         <span class="p">)</span>
+
         <span class="k">if</span> <span class="n">prefix</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*</span><span class="si">{}</span><span class="s2">_[0-9]*.h5&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prefix</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*[0-9]*.h5&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
-        <span class="c1"># To migrate smoothly to removal of stack_ND key in favour of only stack:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_key</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fl</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;stack&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">data_key</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># If available, read resolution</span>
         <span class="k">try</span><span class="p">:</span>
@@ -273,6 +269,12 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="c1"># TODO check this</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;To migrate smoothly to removal of stack_ND key in favour of only stack</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">fl</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;stack&quot;</span> <span class="ow">in</span> <span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -404,6 +406,22 @@
 
         <span class="k">return</span> <span class="n">output</span><span class="p">[</span><span class="n">output_sel</span><span class="p">]</span>
 
+<div class="viewcode-block" id="SplitDataset.as_dask"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.split_dataset.SplitDataset.as_dask">[docs]</a>    <span class="k">def</span> <span class="nf">as_dask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Function to create a Dask array from a split dataset.</span>
+<span class="sd">           :param dataset: SplitDataset object</span>
+<span class="sd">           :return:</span>
+<span class="sd">           Dask array</span>
+<span class="sd">           &quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+
+        <span class="n">arrays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">slices</span><span class="p">():</span>
+            <span class="n">arrays</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">from_array</span><span class="p">(</span>
+                <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">)[</span><span class="sa">f</span><span class="s2">&quot;/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">data_key</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">da</span><span class="o">.</span><span class="n">block</span><span class="p">(</span><span class="n">arrays</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span></div>
+
 <div class="viewcode-block" id="SplitDataset.apply_crop"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.split_dataset.SplitDataset.apply_crop">[docs]</a>    <span class="k">def</span> <span class="nf">apply_crop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Take out the data with a crop</span>
 
@@ -423,7 +441,7 @@
         <span class="p">):</span>
             <span class="n">fl</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">/</span> <span class="n">file_name</span><span class="p">),</span>
-                <span class="p">{</span><span class="s2">&quot;stack_</span><span class="si">{}</span><span class="s2">D&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ds_cropped</span><span class="o">.</span><span class="n">n_dims</span><span class="p">):</span> <span class="bp">self</span><span class="p">[</span><span class="n">block_slices</span><span class="p">]},</span>
+                <span class="p">{</span><span class="s2">&quot;stack&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="p">[</span><span class="n">block_slices</span><span class="p">]},</span>
             <span class="p">)</span>
 
         <span class="n">ds_cropped</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span></div></div>
@@ -444,6 +462,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Existing directory&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{:04d}</span><span class="s2">.h5&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_blocks</span><span class="p">)]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">resolution</span>
 

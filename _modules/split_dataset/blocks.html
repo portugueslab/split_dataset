@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                0.2.2
+                0.3.0
               </div>
             
           
@@ -156,7 +156,6 @@
             
   <h1>Source code for split_dataset.blocks</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">flammkuchen</span> <span class="k">as</span> <span class="nn">fl</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">product</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
 
@@ -278,9 +277,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">shape_block</span><span class="p">[</span><span class="n">dim</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">[</span><span class="n">dim</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_padding</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span> <span class="o">=</span> <span class="n">pad_amount</span><span class="p">[</span><span class="n">dim</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_blocks</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape_full</span><span class="p">)</span>
+        <span class="c1"># set property:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shape_block</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_shape_block</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">n_dims</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">shape_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -376,11 +382,7 @@
                         <span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">,</span>
                         <span class="bp">self</span><span class="o">.</span><span class="n">starts</span><span class="p">,</span>
                     <span class="p">)</span>
-                <span class="p">]</span>
-
-            <span class="c1"># for iterations</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_blocks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_starts</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shape_cropped</span><span class="p">)</span></div>
+                <span class="p">]</span></div>
 
 <div class="viewcode-block" id="Blocks.slices"><a class="viewcode-back" href="../../split_dataset.html#split_dataset.blocks.Blocks.slices">[docs]</a>    <span class="k">def</span> <span class="nf">slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">as_tuples</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">BlockIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">slices</span><span class="o">=</span><span class="ow">not</span> <span class="n">as_tuples</span><span class="p">)</span></div>
@@ -470,13 +472,13 @@
 <span class="sd">                 starting index of data in the first block;</span>
 <span class="sd">                 ending index of data in the last block.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">n_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">start_take</span><span class="p">)</span>
+        <span class="c1"># n_dims = len(start_take)</span>
         <span class="n">block_slices</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">take_block_s_idx</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">take_block_e_idx</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i_dim</span><span class="p">,</span> <span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">start_take</span><span class="p">,</span> <span class="n">end_take</span><span class="p">)):</span>
             <span class="n">axis_index</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
-                <span class="mi">0</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">i_dim</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_dims</span><span class="p">)</span>
+                <span class="mi">0</span> <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="n">i_dim</span> <span class="k">else</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_dims</span><span class="p">)</span>
             <span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">i_dim</span><span class="p">,)</span>
             <span class="n">s</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
                 <span class="mi">0</span><span class="p">,</span>
