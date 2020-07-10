@@ -2,6 +2,7 @@ import numpy as np
 from itertools import product
 from typing import Union, Tuple, Optional
 
+
 class BlockIterator:
     def __init__(self, blocks, slices=True):
         self.blocks = blocks
@@ -119,9 +120,16 @@ class Blocks:
             self._shape_block[dim] = min(shape_block[dim], self.shape_cropped[dim])
             self._padding[dim] = pad_amount[dim]
 
-        self.n_blocks = 0
-        self.n_dims = len(shape_full)
+        # set property:
         self.shape_block = tuple(self._shape_block)
+
+    @property
+    def n_blocks(self):
+        return np.product(self.block_starts.shape[:-1])
+
+    @property
+    def n_dims(self):
+        return len(self.shape_cropped)
 
     @property
     def shape_full(self):
@@ -219,10 +227,6 @@ class Blocks:
                     )
                 ]
 
-            # for iterations
-            self.n_blocks = np.product(self.block_starts.shape[:-1])
-            self.n_dims = len(self.shape_cropped)
-
     def slices(self, as_tuples=False):
         return BlockIterator(self, slices=not as_tuples)
 
@@ -311,13 +315,13 @@ class Blocks:
                  starting index of data in the first block;
                  ending index of data in the last block.
         """
-        n_dims = len(start_take)
+        # n_dims = len(start_take)
         block_slices = []
         take_block_s_idx = []
         take_block_e_idx = []
         for i_dim, (start, end) in enumerate(zip(start_take, end_take)):
             axis_index = tuple(
-                0 if i != i_dim else slice(None) for i in range(n_dims)
+                0 if i != i_dim else slice(None) for i in range(self.n_dims)
             ) + (i_dim,)
             s = max(
                 0,

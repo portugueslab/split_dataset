@@ -5,7 +5,6 @@ import flammkuchen as fl
 from split_dataset.blocks import Blocks
 import warnings
 from itertools import product
-import dask.array as da
 import h5py
 
 
@@ -98,17 +97,13 @@ class SplitDataset(Blocks):
             shape_full=block_metadata["shape_full"],
             shape_block=block_metadata["shape_block"],
         )
+
         if prefix != None:
             files = sorted(self.root.glob("*{}_[0-9]*.h5".format(prefix)))
         else:
             files = sorted(self.root.glob("*[0-9]*.h5"))
         self.files = np.array(files).reshape(self.block_starts.shape[:-1])
 
-        # To migrate smoothly to removal of stack_ND key in favour of only stack:
-        try:
-            self.data_key = [k for k in fl.meta(files[0]).keys() if "stack" in k][0]
-        except IndexError:
-            self.data_key = None
 
         # If available, read resolution
         try:
@@ -117,6 +112,12 @@ class SplitDataset(Blocks):
             self.resolution = (1, 1, 1)
         # TODO check this
         self.shape = self.shape_cropped
+
+    @property
+    def data_key(self):
+        """To migrate smoothly to removal of stack_ND key in favour of only stack
+        """
+        return [k for k in fl.meta(self.files.flatten()[0]).keys() if "stack" in k][0]
 
     def __getitem__(self, item):
         """
@@ -254,20 +255,15 @@ class SplitDataset(Blocks):
            :return:
            Dask array
            """
-        # Load the h5 files:
-        files = sorted(self.root.glob("*[0-9].h5"))  # find all files
-        keys = list(h5py.File(str(files[0]), mode="r").keys())  # all keys in the h5
-        key = [k for k in keys if "stack" in k][0]  # could be stack, or stack_3D, or stack_4D
-        dsets = [h5py.File(f, mode="r")[f"/{key}"] for f in files]  # load all datasets
+        import dask.array as da
 
-        # Make all dask arrays and concatenate them:
-        arrays = [da.from_array(dset) for dset in dsets]  # list of lazy dask arrays
+        arrays = np.empty(self.files.shape, dtype=object)
 
-        # Here we find which axis the stack should be concatenated on:
-        concatenate_axis = [i for i, (sf, sb) in enumerate(zip(self.shape, self.shape_block))
-                            if sf != sb][0]
+        for s, _ in self.slices():
+            arrays[s] = da.from_array(
+                h5py.File(self.files[s], mode="r")[f"/{self.data_key}"])
 
-        return da.concatenate(arrays, axis=concatenate_axis)
+        return da.block(arrays.tolist())
 
     def apply_crop(self, crop):
         """ Take out the data with a crop
@@ -288,7 +284,7 @@ class SplitDataset(Blocks):
         ):
             fl.save(
                 str(self.root / file_name),
-                {"stack_{}D".format(ds_cropped.n_dims): self[block_slices]},
+                {"stack": self[block_slices]},
             )
 
         ds_cropped.finalize()
