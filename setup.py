@@ -10,7 +10,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ["flammkuchen", "numpy"]
+requirements = ["flammkuchen", "numpy", "dask[array]", "h5py"]
 
 setup_requirements = ['pytest-runner', ]
 
