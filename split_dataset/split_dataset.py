@@ -18,8 +18,7 @@ def save_to_split_dataset(
     prefix="",
     compression="blosc",
 ):
-    """ Function to save block of data into a split_dataset.
-    """
+    """Function to save block of data into a split_dataset."""
 
     new_name = prefix + ("_cropped" if crop is not None else "")
     padding = (
@@ -104,7 +103,6 @@ class SplitDataset(Blocks):
             files = sorted(self.root.glob("*[0-9]*.h5"))
         self.files = np.array(files).reshape(self.block_starts.shape[:-1])
 
-
         # If available, read resolution
         try:
             self.resolution = block_metadata["resolution"]
@@ -119,8 +117,7 @@ class SplitDataset(Blocks):
 
     @property
     def data_key(self):
-        """To migrate smoothly to removal of stack_ND key in favour of only stack
-        """
+        """To migrate smoothly to removal of stack_ND key in favour of only stack"""
         return [k for k in fl.meta(self.files.flatten()[0]).keys() if "stack" in k][0]
 
     def __getitem__(self, item):
@@ -224,7 +221,9 @@ class SplitDataset(Blocks):
                 )
             )
             arr = fl.load(
-                str(self.files[f_idx]), "/" + self.data_key, sel=fl.aslice[sel_slices],
+                str(self.files[f_idx]),
+                "/" + self.data_key,
+                sel=fl.aslice[sel_slices],
             )
 
             if output is None:
@@ -254,25 +253,24 @@ class SplitDataset(Blocks):
         return output[output_sel]
 
     def as_dask(self):
-        """ Function to create a Dask array from a split dataset.
-           :param dataset: SplitDataset object
-           :return:
-           Dask array
-           """
+        """Function to create a Dask array from a split dataset.
+        :param dataset: SplitDataset object
+        :return:
+        Dask array
+        """
         import dask.array as da
 
         arrays = np.empty(self.files.shape, dtype=object)
 
         for s, _ in self.slices():
             arrays[s] = da.from_array(
-                h5py.File(self.files[s], mode="r")[f"/{self.data_key}"])
+                h5py.File(self.files[s], mode="r")[f"/{self.data_key}"]
+            )
 
         return da.block(arrays.tolist())
 
     def apply_crop(self, crop):
-        """ Take out the data with a crop
-
-        """
+        """Take out the data with a crop"""
         # TODO there is the crop atrribute, which is a lazy crop, this should actually return a non-cropped dataset
         ds_cropped = EmptySplitDataset(
             shape_full=self.shape,
@@ -295,7 +293,7 @@ class SplitDataset(Blocks):
 
 
 class EmptySplitDataset(Blocks):
-    """ Class to initialize an empty dataset for which we have to save metadata
+    """Class to initialize an empty dataset for which we have to save metadata
     after filling its blocks.
     """
 
@@ -310,13 +308,13 @@ class EmptySplitDataset(Blocks):
         if not self.root.is_dir():
             self.root.mkdir(parents=True)
         else:
-            warnings.warn('Existing directory')
+            warnings.warn("Existing directory")
 
         self.files = ["{:04d}.h5".format(i) for i in range(self.n_blocks)]
         self.resolution = resolution
 
     def save_block_data(self, n, data, verbose=False):
-        """ Optional method to save data in a block. Often we don't use it,
+        """Optional method to save data in a block. Often we don't use it,
         as we directly save data in the parallelized function. Might be good to
         find ways of centralizing saving here?
         :param n: n of the block we are saving in;
@@ -341,8 +339,9 @@ class EmptySplitDataset(Blocks):
         block_dict["shape_full"] = self.shape_cropped
         block_dict["crop_start"] = (0,) * n_dims
         block_dict["crop_end"] = (0,) * n_dims
-        block_dict["resolution"] = self.resolution \
-            if self.resolution is not None else (1,) * n_dims
+        block_dict["resolution"] = (
+            self.resolution if self.resolution is not None else (1,) * n_dims
+        )
 
         block_dict["axis_order"] = "tzyx" if n_dims == 4 else "zyx"
 
@@ -351,7 +350,7 @@ class EmptySplitDataset(Blocks):
 
 
 def _save_metadata_json(dictionary, root):
-    """ Save json file preventing type failures for stack shapes
+    """Save json file preventing type failures for stack shapes
     :param path: path for saving
     :param dictionary: dictionary to be saved
     :return:

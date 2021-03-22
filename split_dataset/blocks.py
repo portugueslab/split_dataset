@@ -64,7 +64,7 @@ class Blocks:
         padding: Union[int, Tuple] = 0,
         crop: Optional[Tuple] = None,
     ):
-        """ Make a block structure. It can be defined using block size or number
+        """Make a block structure. It can be defined using block size or number
         of blocks (number of blocks if specified will overwrite size).
         For example, one split over the 2nd and 3rd dimensions of a 100x20x40x10 block can
         equivalently defined as:
@@ -172,7 +172,7 @@ class Blocks:
         self.update_block_structure()
 
     def update_stack_dims(self):
-        """ Update stack dimensions and cropping, if shape_full or cropping
+        """Update stack dimensions and cropping, if shape_full or cropping
         is changed.
         :return:
         """
@@ -211,7 +211,9 @@ class Blocks:
                 dtype=np.int32,
             )
             self.block_ends = np.empty_like(self.block_starts)
-            for idx_blocks in product(*(range(s) for s in self.block_starts.shape[:-1])):
+            for idx_blocks in product(
+                *(range(s) for s in self.block_starts.shape[:-1])
+            ):
                 self.block_starts[idx_blocks + (slice(None),)] = [
                     st + i_bd * bs
                     for i_bd, bs, st in zip(idx_blocks, self.shape_block, self.starts)
