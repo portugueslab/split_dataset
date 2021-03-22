@@ -114,6 +114,10 @@ class SplitDataset(Blocks):
         self.shape = self.shape_cropped
 
     @property
+    def ndim(self):
+        return len(self.shape)
+
+    @property
     def data_key(self):
         """To migrate smoothly to removal of stack_ND key in favour of only stack
         """
@@ -178,7 +182,7 @@ class SplitDataset(Blocks):
                             ends.append(min(dim_slc.stop, dim_full))
                         else:
                             ends.append(max(0, dim_full + dim_slc.stop))
-                elif isinstance(dim_slc, int) or isinstance(dim_slc, np.int32):
+                elif type(dim_slc) in [int, np.int32, np.int64]:
                     singletons[i_dim] = True
                     if dim_slc >= 0:
                         if dim_slc > dim_full - 1:
@@ -327,7 +331,7 @@ class EmptySplitDataset(Blocks):
             if data.shape != self.shape_block:
                 print(" - data has different dimension from block!")
 
-        to_save = {f"stack": data}
+        to_save = {"stack": data}
 
         fl.save(str(self.root / fname), to_save, compression="blosc")
 
