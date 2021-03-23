@@ -12,13 +12,8 @@ with open("HISTORY.rst") as history_file:
 
 requirements = ["flammkuchen", "numpy", "dask[array]", "h5py"]
 
-setup_requirements = [
-    "pytest-runner",
-]
-
-test_requirements = [
-    "pytest>=3",
-]
+with open("requirements_dev.txt") as f:
+    requirements_dev = f.read().splitlines()
 
 setup(
     author="Vilim Stih & Luigi Petrucco @portugueslab",
@@ -37,15 +32,14 @@ setup(
     ],
     description="A package for HDF5-based chunked arrays",
     install_requires=requirements,
+    extras_require=dict(dev=requirements_dev),
     license="GNU General Public License v3",
     long_description=readme + "\n\n" + history,
     include_package_data=True,
     keywords="split_dataset",
     name="split_dataset",
     packages=find_packages(include=["split_dataset", "split_dataset.*"]),
-    setup_requires=setup_requirements,
     test_suite="tests",
-    tests_require=test_requirements,
     url="https://github.com/portugueslab/split_dataset",
     version="0.3.0",
     zip_safe=False,
