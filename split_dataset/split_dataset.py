@@ -1,11 +1,13 @@
-import numpy as np
-from pathlib import Path
 import json
-import flammkuchen as fl
-from split_dataset.blocks import Blocks
 import warnings
 from itertools import product
+from pathlib import Path
+
+import flammkuchen as fl
 import h5py
+import numpy as np
+
+from split_dataset.blocks import Blocks
 
 
 # TODO this should probably be done as a constructor of the SplitDataset
@@ -53,8 +55,9 @@ class SplitDataset(Blocks):
     def __init__(self, root, prefix=None):
         """
         :param root: The directory containing the files
-        :param prefix: The class assumes individual file names to be xxxx.h5. If there is a prefix to this,
-        for example if the files are stack_xxxx.h5 this has to be passed to the object as a string, in this
+        :param prefix: The class assumes individual file names to be xxxx.h5.
+        If there is a prefix to this, for example if the files are stack_xxxx.h5
+        this has to be passed to the object as a string, in this
         particular case it would be prefix="stack_"
         """
 
@@ -97,10 +100,11 @@ class SplitDataset(Blocks):
             shape_block=block_metadata["shape_block"],
         )
 
-        if prefix != None:
-            files = sorted(self.root.glob("*{}_[0-9]*.h5".format(prefix)))
-        else:
+        if prefix is None:
             files = sorted(self.root.glob("*[0-9]*.h5"))
+        else:
+            files = sorted(self.root.glob("*{}_[0-9]*.h5".format(prefix)))
+
         self.files = np.array(files).reshape(self.block_starts.shape[:-1])
 
         # If available, read resolution
@@ -271,7 +275,8 @@ class SplitDataset(Blocks):
 
     def apply_crop(self, crop):
         """Take out the data with a crop"""
-        # TODO there is the crop atrribute, which is a lazy crop, this should actually return a non-cropped dataset
+        # TODO there is the crop atrribute, which is a lazy crop, this should actually
+        #  return a non-cropped dataset
         ds_cropped = EmptySplitDataset(
             shape_full=self.shape,
             shape_block=self.shape_block,

@@ -1,6 +1,11 @@
-import numpy as np
 from itertools import product
-from typing import Union, Tuple, Optional
+from typing import Optional, Tuple, Union
+
+import numpy as np
+
+
+def _drop_ith(xs, dim_to_drop):
+    return tuple(x for i, x in enumerate(xs) if i != dim_to_drop)
 
 
 class BlockIterator:
@@ -66,8 +71,8 @@ class Blocks:
     ):
         """Make a block structure. It can be defined using block size or number
         of blocks (number of blocks if specified will overwrite size).
-        For example, one split over the 2nd and 3rd dimensions of a 100x20x40x10 block can
-        equivalently defined as:
+        For example, one split over the 2nd and 3rd dimensions of a 100x20x40x10 block
+        can equivalently defined as:
         BlockSplitter((100,20,40,10), block_size=(10,10,20,30))
         BlockSplitter((100,20,40,10), blocks_number=(1, 2, 2, 1))
         BlockSplitter((100,20,40,10), dim_split=(1,2), block_size=(10,20))

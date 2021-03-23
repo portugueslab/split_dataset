@@ -5,7 +5,7 @@ __version__ = "0.3.0"
 
 from split_dataset.blocks import Blocks
 from split_dataset.split_dataset import (
-    SplitDataset,
     EmptySplitDataset,
+    SplitDataset,
     save_to_split_dataset,
 )

@@ -2,10 +2,12 @@
 
 """Tests for `split_dataset` package."""
 
-import unittest
 import shutil
-import numpy as np
 import tempfile
+import unittest
+
+import numpy as np
+
 from split_dataset import save_to_split_dataset
 
 
