@@ -381,12 +381,11 @@ class Blocks:
         :param dim_to_drop: dimension to be dropped (int)
         :return: new BlockSplitter object
         """
-        drop_ith = lambda xs: tuple(x for i, x in enumerate(xs) if i != dim_to_drop)
         return Blocks(
-            drop_ith(self.shape_full),
-            shape_block=drop_ith(self.shape_block),
-            padding=drop_ith(self.padding),
-            crop=drop_ith(self.crop),
+            _drop_ith(self.shape_full, dim_to_drop),
+            shape_block=_drop_ith(self.shape_block, dim_to_drop),
+            padding=_drop_ith(self.padding, dim_to_drop),
+            crop=_drop_ith(self.crop, dim_to_drop),
         )
 
     def serialize(self):
