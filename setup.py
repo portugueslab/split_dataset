@@ -41,6 +41,6 @@ setup(
     packages=find_packages(include=["split_dataset", "split_dataset.*"]),
     test_suite="tests",
     url="https://github.com/portugueslab/split_dataset",
-    version="0.4.0",
+    version="0.4.1",
     zip_safe=False,
 )
