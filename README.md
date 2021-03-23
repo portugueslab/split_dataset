@@ -11,15 +11,42 @@
 
 
 
-A package for saving and reading large HDF5-based chunked arrays. Used in fimpy and sashimi.
+A package for saving and reading large HDF5-based chunked arrays. 
 
-This package has been developed in the [`Portugues lab`](http://www.portugueslab.com). For the documentation,
-visit https://portugueslab.github.io/split_dataset
+This package has been developed in the [`Portugues lab`](http://www.portugueslab.com) for volumetric calcium imaging data. `split_dataset` is extensivly used in the calcium imaging analysis package [`fimpy`](https://github.com/portugueslab/fimpy); SplitDatasets are saved by the microscope control libraries [`sashimi`](https://github.com/portugueslab/sashimi) and [`brunoise`](https://github.com/portugueslab/brunoise).
 
-Features
---------
+[`napari-split-dataset`](https://github.com/portugueslab/napari-split-dataset) support the visualization of SplitDatasets in `napari`
 
-* TODO
+# Features
+The package contains the definition of  `SplitDataset` objects, that save large arrays in memory as separate  `.h5` files. Any n of dimensions and block sizes are supported in principle, but the package has been used only with 3D and 4D arrays.
+Numpy-style indexing can then be used to retrieve data from a `SplitDataset` object.
+
+# Minimal example
+```python
+# Load a  SplitDataset via a SplitDataset object:
+from split_dataset import SplitDataset 
+ds = SplitDataset(path_to_dataset)
+
+# Retrieve data in an interval:
+ds[n_start:n_end, :, :, :]
+```
+
+
+# TODO
+* support for cropping a `SplitDataset`
+* support for resolution and frequency metadata
+
+
+# History
+
+### 0.4.0 (2021-03-23)
+* Added support to use a `SplitDataset` as data in a `napari` layer.
+
+...
+
+### 0.1.0 (2020-05-06)
+* First release on PyPI.
+
 
 Credits
 -------
