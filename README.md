@@ -4,8 +4,7 @@
     https://pypi.python.org/pypi/split_dataset)
 [![Tests](https://img.shields.io/github/workflow/status/brainglobe/bg-atlasapi/tests)](
     https://github.com/brainglobe/bg-atlasapi/actions)
-[![Coverage](https://codecov.io/gh/portugueslab/split_dataset/branch/master/graph/badge.svg)](
-    https://codecov.io/gh/portugueslab/split_dataset)
+[![Coverage Status](https://coveralls.io/repos/github/portugueslab/split_dataset/badge.svg?branch=master)](https://coveralls.io/github/portugueslab/split_dataset?branch=master)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
