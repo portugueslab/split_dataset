@@ -4,11 +4,9 @@
 
 from setuptools import find_packages, setup
 
-with open("README.rst") as readme_file:
+with open("README.md") as readme_file:
     readme = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
 
 requirements = ["flammkuchen", "numpy", "dask[array]", "h5py"]
 
@@ -34,7 +32,8 @@ setup(
     install_requires=requirements,
     extras_require=dict(dev=requirements_dev),
     license="GNU General Public License v3",
-    long_description=readme + "\n\n" + history,
+    long_description=readme,
+    long_description_content_type="text/markdown",
     include_package_data=True,
     keywords="split_dataset",
     name="split_dataset",
