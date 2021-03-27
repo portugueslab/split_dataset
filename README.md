@@ -42,7 +42,7 @@ New split datasets can be created with the `split_dataset.save_to_split_dataset`
 
 
 # TODO
-* provide utilities for
+* provide utilities for partial saving of split datasets
 * support for more advanced indexing (support for step and vector indexing)
 * support for cropping a `SplitDataset`
 * support for resolution and frequency metadata
