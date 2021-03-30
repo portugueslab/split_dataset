@@ -8,7 +8,7 @@ with open("README.md") as readme_file:
     readme = readme_file.read()
 
 
-requirements = ["flammkuchen", "numpy", "dask[array]", "h5py"]
+requirements = ["flammkuchen", "numpy"]
 
 with open("requirements_dev.txt") as f:
     requirements_dev = f.read().splitlines()
