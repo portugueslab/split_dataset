@@ -154,7 +154,7 @@ class SplitDataset(Blocks):
 
             starts = []
             ends = []
-            singletons = np.zeros(len(item), dtype=np.bool)
+            singletons = np.zeros(len(item), dtype=bool)
             for i_dim, (dim_slc, dim_full) in enumerate(zip(item, self.shape)):
                 # i_dim: index of current dimension
                 # dim_slc: slice/index for current dimension

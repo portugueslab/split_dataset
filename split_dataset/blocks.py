@@ -286,7 +286,7 @@ class Blocks:
         :return:
         """
         block_idx = self.linear_to_cartesian(i_block)
-        act_dims = np.ones(self.n_dims, dtype=np.bool)
+        act_dims = np.ones(self.n_dims, dtype=bool)
         if dims is not None:
             act_dims[dims] = True
 
