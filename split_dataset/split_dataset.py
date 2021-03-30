@@ -4,7 +4,6 @@ from itertools import product
 from pathlib import Path
 
 import flammkuchen as fl
-import h5py
 import numpy as np
 
 from split_dataset.blocks import Blocks
@@ -255,23 +254,6 @@ class SplitDataset(Blocks):
         output_sel = tuple(0 if singleton else slice(None) for singleton in singletons)
 
         return output[output_sel]
-
-    def as_dask(self):
-        """Function to create a Dask array from a split dataset.
-        :param dataset: SplitDataset object
-        :return:
-        Dask array
-        """
-        import dask.array as da
-
-        arrays = np.empty(self.files.shape, dtype=object)
-
-        for s, _ in self.slices():
-            arrays[s] = da.from_array(
-                h5py.File(self.files[s], mode="r")[f"/{self.data_key}"]
-            )
-
-        return da.block(arrays.tolist())
 
     def apply_crop(self, crop):
         """Take out the data with a crop"""
