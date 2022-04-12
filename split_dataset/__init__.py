@@ -1,7 +1,7 @@
 """Top-level package for Split Dataset."""
 
 __author__ = """Vilim Stih & Luigi Petrucco @portugueslab"""
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 
 from split_dataset.blocks import Blocks
 from split_dataset.split_dataset import (
