@@ -119,6 +119,15 @@ class SplitDataset(Blocks):
         return len(self.shape)
 
     @property
+    def dtype(self):
+        px = fl.load(
+            str(self.files.flatten()[0]),
+            "/" + self.data_key,
+            sel=(0,) * len(self.shape)
+        )
+        return px.dtype
+
+    @property
     def data_key(self):
         """To migrate smoothly to removal of stack_ND key in favour of only stack"""
         return [k for k in fl.meta(self.files.flatten()[0]).keys() if "stack" in k][0]
