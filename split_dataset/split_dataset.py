@@ -123,7 +123,7 @@ class SplitDataset(Blocks):
         px = fl.load(
             str(self.files.flatten()[0]),
             "/" + self.data_key,
-            sel=(0,) * len(self.shape)
+            sel=(0,) * len(self.shape),
         )
         return px.dtype
 
